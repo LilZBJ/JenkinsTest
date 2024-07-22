@@ -1,23 +1,25 @@
+Update the Jenkins to the following below
 pipeline {
-  agent {
-    docker {
-      image 'composer:latest'
-      args '# docker pull composer:latest'
+    agent {
+        docker {
+            image 'composer:latest'
+        }
     }
-
-  }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'composer install'
-      }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'composer install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './vendor/bin/phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
+            }
+        }
     }
-
-    stage('Test') {
-      steps {
-        sh './vendor/bin/phpunit tests'
-      }
+    post {
+        always {
+            junit testResults: 'logs/unitreport.xml'
+        }
     }
-
-  }
 }
