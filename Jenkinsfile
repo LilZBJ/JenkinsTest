@@ -1,4 +1,3 @@
-Update the Jenkins to the following below
 pipeline {
     agent {
         docker {
